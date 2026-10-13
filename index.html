@@ -2,29 +2,27 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Samlar Avito Monitor</title>
 <style>
 *{box-sizing:border-box}
 body{margin:0;background:#10141d;color:#eef2fa;font-family:Arial,sans-serif;padding:25px}
 .container{max-width:1100px;margin:auto}
-header{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:15px;margin-bottom:30px}
-h1{font-size:25px;margin:0}
+header{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:15px;margin-bottom:25px}
+h1{font-size:25px}
 .muted{color:#929caf;font-size:13px}
-.status{background:#123b2c;color:#54e6a0;padding:9px 15px;border-radius:20px;font-size:13px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px}
+.status{background:#123b2c;color:#54e6a0;padding:10px 15px;border-radius:20px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:15px}
 .card{background:#1b2230;border:1px solid #2b3547;border-radius:14px;padding:22px}
-.card p{color:#9daabd;margin:0 0 13px;font-size:14px}
+.card p{color:#9daabd;font-size:14px}
 .number{font-size:34px;font-weight:bold}
-.green{color:#55e5a0}
 .blue{color:#70aaff}
+.green{color:#55e5a0}
 .orange{color:#ffbd65}
 .section{margin-top:25px}
-.section h2{font-size:18px}
 .log{background:#171e2a;padding:17px;border-radius:12px;font-family:monospace;font-size:13px;line-height:2;color:#aebbd0}
 .log div{border-bottom:1px solid #293344}
-.dot{color:#55e5a0}
-button{background:#3478f6;border:0;color:white;padding:12px 18px;border-radius:9px;cursor:pointer}
+button{background:#3478f6;color:white;border:0;padding:13px 18px;border-radius:9px;cursor:pointer}
 </style>
 </head>
 <body>
@@ -32,9 +30,9 @@ button{background:#3478f6;border:0;color:white;padding:12px 18px;border-radius:9
 <header>
 <div>
 <h1>◈ SAMLAR AVITO MONITOR</h1>
-<p class="muted">Система мониторинга объявлений недвижимости</p>
+<p class="muted">Система демонстрации мониторинга недвижимости</p>
 </div>
-<div class="status">● SYSTEM ONLINE</div>
+<div class="status">● DEMO ONLINE</div>
 </header>
 
 <div class="grid">
@@ -45,23 +43,26 @@ button{background:#3478f6;border:0;color:white;padding:12px 18px;border-radius:9
 </div>
 
 <div class="section">
-<h2>Последние события</h2>
+<h2>Журнал событий</h2>
 <div class="log" id="logs">
-<div><span class="dot">●</span> Система демонстрации запущена</div>
-<div>Проверка тестового источника завершена</div>
-<div>Имитация фильтрации объявлений</div>
-<div>Тестовый цикл завершён успешно</div>
+<div>Система демонстрации запущена</div>
 </div>
 </div>
 
 <div class="section">
-<button onclick="simulate()">Запустить тестовую проверку</button>
-<p class="muted" id="time">Последнее обновление: —</p>
+<button onclick="simulate()">Запустить проверку вручную</button>
+<p class="muted" id="time">Ожидание запуска...</p>
+<p class="muted">Демонстрационный режим. Данные генерируются автоматически.</p>
 </div>
 </div>
 
 <script>
-const events=[
+let checked = 248;
+let found = 12;
+let owners = 8;
+let filtered = 4;
+
+const events = [
 "Подключение к тестовому источнику",
 "Проверка новых объявлений",
 "Анализ предложений от собственников",
@@ -70,22 +71,43 @@ const events=[
 "Тестовый цикл успешно завершён"
 ];
 
-function simulate(){
-let logs=document.getElementById("logs");
-let now=new Date().toLocaleTimeString("ru-RU");
-let line=document.createElement("div");
-line.innerHTML='<span class="dot">●</span> '+now+' — '+events[Math.floor(Math.random()*events.length)];
-logs.prepend(line);
-document.getElementById("checked").textContent=
-Number(document.getElementById("checked").textContent)+Math.floor(Math.random()*20+5);
-document.getElementById("found").textContent=
-Number(document.getElementById("found").textContent)+Math.floor(Math.random()*3);
-document.getElementById("time").textContent="Последнее обновление: "+now;
+function addLog(message) {
+    const logs = document.getElementById("logs");
+    const line = document.createElement("div");
+    line.textContent = "● " + new Date().toLocaleTimeString("ru-RU") + " — " + message;
+    logs.prepend(line);
+
+    while (logs.children.length > 20) {
+        logs.removeChild(logs.lastElementChild);
+    }
 }
-// Автоматический демонстрационный запуск каждые 5 секунд
-setInterval(() => {
-    simulate();
-}, 5000);  
+
+function simulate() {
+    checked += Math.floor(Math.random() * 20) + 5;
+
+    const newFound = Math.floor(Math.random() * 3) + 1;
+    found += newFound;
+    owners += Math.floor(Math.random() * 2);
+    filtered += Math.floor(Math.random() * 2);
+
+    document.getElementById("checked").textContent = checked;
+    document.getElementById("found").textContent = found;
+    document.getElementById("owners").textContent = owners;
+    document.getElementById("filtered").textContent = filtered;
+
+    const event = events[Math.floor(Math.random() * events.length)];
+    addLog(event);
+
+    document.getElementById("time").textContent =
+        "Последнее обновление: " + new Date().toLocaleTimeString("ru-RU");
+}
+
+// Первый запуск и автоматические проверки
+addLog("Автоматический режим активирован");
+document.getElementById("time").textContent =
+    "Последнее обновление: " + new Date().toLocaleTimeString("ru-RU");
+
+setInterval(simulate, 5000);
 </script>
 </body>
 </html>
