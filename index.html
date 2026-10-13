@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Samlar Avito Monitor</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#10141d;color:#eef2fa;font-family:Arial,sans-serif;padding:25px}
+.container{max-width:1100px;margin:auto}
+header{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:15px;margin-bottom:30px}
+h1{font-size:25px;margin:0}
+.muted{color:#929caf;font-size:13px}
+.status{background:#123b2c;color:#54e6a0;padding:9px 15px;border-radius:20px;font-size:13px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px}
+.card{background:#1b2230;border:1px solid #2b3547;border-radius:14px;padding:22px}
+.card p{color:#9daabd;margin:0 0 13px;font-size:14px}
+.number{font-size:34px;font-weight:bold}
+.green{color:#55e5a0}
+.blue{color:#70aaff}
+.orange{color:#ffbd65}
+.section{margin-top:25px}
+.section h2{font-size:18px}
+.log{background:#171e2a;padding:17px;border-radius:12px;font-family:monospace;font-size:13px;line-height:2;color:#aebbd0}
+.log div{border-bottom:1px solid #293344}
+.dot{color:#55e5a0}
+button{background:#3478f6;border:0;color:white;padding:12px 18px;border-radius:9px;cursor:pointer}
+</style>
+</head>
+<body>
+<div class="container">
+<header>
+<div>
+<h1>◈ SAMLAR AVITO MONITOR</h1>
+<p class="muted">Система мониторинга объявлений недвижимости</p>
+</div>
+<div class="status">● SYSTEM ONLINE</div>
+</header>
+
+<div class="grid">
+<div class="card"><p>Проверено объявлений</p><div class="number blue" id="checked">248</div></div>
+<div class="card"><p>Найдено новых</p><div class="number green" id="found">12</div></div>
+<div class="card"><p>От собственников</p><div class="number orange" id="owners">8</div></div>
+<div class="card"><p>Отфильтровано</p><div class="number" id="filtered">4</div></div>
+</div>
+
+<div class="section">
+<h2>Последние события</h2>
+<div class="log" id="logs">
+<div><span class="dot">●</span> Система демонстрации запущена</div>
+<div>Проверка тестового источника завершена</div>
+<div>Имитация фильтрации объявлений</div>
+<div>Тестовый цикл завершён успешно</div>
+</div>
+</div>
+
+<div class="section">
+<button onclick="simulate()">Запустить тестовую проверку</button>
+<p class="muted" id="time">Последнее обновление: —</p>
+</div>
+</div>
+
+<script>
+const events=[
+"Подключение к тестовому источнику",
+"Проверка новых объявлений",
+"Анализ предложений от собственников",
+"Проверка дубликатов",
+"Фильтрация результатов",
+"Тестовый цикл успешно завершён"
+];
+
+function simulate(){
+let logs=document.getElementById("logs");
+let now=new Date().toLocaleTimeString("ru-RU");
+let line=document.createElement("div");
+line.innerHTML='<span class="dot">●</span> '+now+' — '+events[Math.floor(Math.random()*events.length)];
+logs.prepend(line);
+document.getElementById("checked").textContent=
+Number(document.getElementById("checked").textContent)+Math.floor(Math.random()*20+5);
+document.getElementById("found").textContent=
+Number(document.getElementById("found").textContent)+Math.floor(Math.random()*3);
+document.getElementById("time").textContent="Последнее обновление: "+now;
+}
+</script>
+</body>
+</html>
